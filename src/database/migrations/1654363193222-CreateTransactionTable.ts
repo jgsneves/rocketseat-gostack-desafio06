@@ -2,6 +2,7 @@ import {
   MigrationInterface,
   QueryRunner,
   Table,
+  TableColumn,
   TableForeignKey,
 } from 'typeorm';
 
@@ -32,11 +33,6 @@ export default class CreateTransactionTable1654363193222
           type: 'int',
         },
         {
-          name: 'category_id',
-          type: 'uuid',
-          isNullable: true,
-        },
-        {
           name: 'created_at',
           type: 'timestamp with time zone',
           default: 'now()',
@@ -49,6 +45,15 @@ export default class CreateTransactionTable1654363193222
       ],
     });
     await queryRunner.createTable(transactionTable);
+
+    await queryRunner.addColumn(
+      'transactions',
+      new TableColumn({
+        name: 'category_id',
+        type: 'uuid',
+        isNullable: true,
+      }),
+    );
 
     await queryRunner.createForeignKey(
       'transactions',
@@ -64,6 +69,8 @@ export default class CreateTransactionTable1654363193222
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.dropForeignKey('transactions', 'CategoryForeignKey');
+
+    await queryRunner.dropColumn('transactions', 'category_id');
 
     await queryRunner.dropTable('transactions');
   }

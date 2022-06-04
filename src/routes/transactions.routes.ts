@@ -1,7 +1,7 @@
 import { Router } from 'express';
+import CreateTransactionService from '../services/CreateTransactionService';
 
 // import TransactionsRepository from '../repositories/TransactionsRepository';
-// import CreateTransactionService from '../services/CreateTransactionService';
 // import DeleteTransactionService from '../services/DeleteTransactionService';
 // import ImportTransactionsService from '../services/ImportTransactionsService';
 
@@ -12,7 +12,17 @@ transactionsRouter.get('/', async (request, response) => {
 });
 
 transactionsRouter.post('/', async (request, response) => {
-  // TODO
+  const { title, value, category, type } = request.body;
+
+  const createTransactionService = new CreateTransactionService();
+  const newTransaction = await createTransactionService.execute({
+    title,
+    value,
+    category,
+    type,
+  });
+
+  return response.json(newTransaction);
 });
 
 transactionsRouter.delete('/:id', async (request, response) => {
