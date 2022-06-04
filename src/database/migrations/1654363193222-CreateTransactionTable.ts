@@ -7,7 +7,7 @@ import {
 
 export default class CreateTransactionTable1654363193222
   implements MigrationInterface {
-  public async up(queryRunner: QueryRunner): Promise<any> {
+  public async up(queryRunner: QueryRunner): Promise<void> {
     const transactionTable = new Table({
       name: 'transactions',
       columns: [
