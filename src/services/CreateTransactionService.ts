@@ -20,6 +20,14 @@ class CreateTransactionService {
   }: Request): Promise<Transaction> {
     const transactionRepository = getCustomRepository(TransactionsRepository);
 
+    if (type === 'outcome') {
+      const balance = await transactionRepository.getBalance();
+
+      if (value > balance.total) {
+        throw new AppError('Não há saldo suficiente para esta operação!');
+      }
+    }
+
     const categoryRepository = getRepository(Category);
 
     const [categoryFromDatabase] = await categoryRepository.find({
